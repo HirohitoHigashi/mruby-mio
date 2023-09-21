@@ -5,16 +5,15 @@
 #
 module I2C
   def self.new(node = "/dev/i2c-1", *params)
-    I2C::Device.new(node, *params )
+    I2C::LinuxI2Cdev.new(node, *params)
   end
 end
-
 
 ##
 # I2C Device driver
 # only implement high-level methods.
 #
-class I2C::Device
+class I2C::LinuxI2Cdev
   ##
   # constructor
   #
@@ -38,7 +37,7 @@ class I2C::Device
     out_data = _rebuild_output_data( param )
 
     _use_slave_adrs( i2c_adrs_7 )
-    @device.syswrite( out_data )
+    @device.syswrite( out_data )  if !out_data.empty?
     @device.sysread( read_bytes )
   end
 
@@ -53,8 +52,6 @@ class I2C::Device
   def write( i2c_adrs_7 , *outputs )
     out_data = _rebuild_output_data( outputs )
 
-    # TODO data.empty? の時どうするか？
-
     _use_slave_adrs( i2c_adrs_7 )
     @device.syswrite( out_data )
   end
@@ -66,7 +63,7 @@ class I2C::Device
   end
 
   def _rebuild_output_data( arg )
-    data = ""
+    data = "".b
     arg.flatten.each {|d|
       case d
       when Integer
