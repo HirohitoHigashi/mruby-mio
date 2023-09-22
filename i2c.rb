@@ -14,6 +14,14 @@ end
 # only implement high-level methods.
 #
 class I2C::LinuxI2Cdev
+
+  # Constants
+  # /usr/include/linux/i2c.h i2c-dev.h
+  I2C_SLAVE = 0x0703
+  I2C_RDWR  = 0x0707
+  I2C_M_RD  = 0x0001
+
+
   ##
   # constructor
   #
@@ -33,13 +41,47 @@ class I2C::LinuxI2Cdev
   #@param [Integer,String,Array<Integer>] param  output data before reading.
   #@return [String]     reading datas.
   #
-  def read( i2c_adrs_7, read_bytes, *param )
+  def read_sysread( i2c_adrs_7, read_bytes, *param )
     out_data = _rebuild_output_data( param )
 
     _use_slave_adrs( i2c_adrs_7 )
     @device.syswrite( out_data )  if !out_data.empty?
     @device.sysread( read_bytes )
   end
+
+
+  def read_ioctl( i2c_adrs_7, read_bytes, *param )
+    out_data = _rebuild_output_data( param )
+    recv_data = "\x00".b * read_bytes
+
+    # prepare the struct i2c_msg[2]
+    # struct i2c_msg {
+    #        __u16 addr;
+    #        __u16 flags;
+    #        __u16 len;         << hidden padding _u16
+    #        __u8 *buf;
+    # };
+    i2c_msg_s = [ i2c_adrs_7, 0, out_data.bytesize, 0,
+                  [out_data].pack('p').unpack1('J') ].pack('SSSSJ')
+    i2c_msg_r = [ i2c_adrs_7, I2C_M_RD, read_bytes, 0,
+                  [recv_data].pack('p').unpack1('J') ].pack('SSSSJ')
+
+    # prepare the struct i2c_rdwr_ioctl_data
+    # struct i2c_rdwr_ioctl_data {
+    #         struct i2c_msg *msgs;   /* pointers to i2c_msgs */
+    #         __u32 nmsgs;            /* number of i2c_msgs */
+    # };
+    if out_data.empty?
+      arg = [ [i2c_msg_r            ].pack('P').unpack1('J'), 1 ].pack('JL')
+    else
+      arg = [ [i2c_msg_s + i2c_msg_r].pack('P').unpack1('J'), 2 ].pack('JL')
+    end
+
+    @device.ioctl( I2C_RDWR, arg )
+    return recv_data
+  end
+
+  alias read read_ioctl
 
 
   ##
@@ -59,7 +101,7 @@ class I2C::LinuxI2Cdev
 
   private
   def _use_slave_adrs( i2c_adrs_7 )
-    @device.ioctl( 0x0703, i2c_adrs_7 )         # see i2c-dev.h
+    @device.ioctl( I2C_SLAVE, i2c_adrs_7 )
   end
 
   def _rebuild_output_data( arg )
