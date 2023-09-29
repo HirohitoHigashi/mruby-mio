@@ -223,7 +223,7 @@ class UART::GemSerialPort
   def send_break( time = 0 )
     t = (time * 10).to_i
     t = [t, 1].max
-    p t
+
     @device.break( t )
   end
 
