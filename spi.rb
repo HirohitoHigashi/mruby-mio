@@ -206,7 +206,7 @@ class SPI::LinuxSPIdev
       when Integer
         data << d.chr
       when String
-        data << d
+        data << d.force_encoding(Encoding::ASCII_8BIT)
       else
         raise ArgumentError
       end
