@@ -1,7 +1,6 @@
 # mruby-mio
 
-Microprocessor peripheral I/O interface.
+Microprocessor peripheral I/O interface implementation.
 
-Compliant with mruby Microcontroller Peripheral Interface Guide.  
+Compliant with mruby and mruby/c Microcontroller Peripheral Interface Guide.  
 https://github.com/mruby/microcontroller-peripheral-interface-guide
-
