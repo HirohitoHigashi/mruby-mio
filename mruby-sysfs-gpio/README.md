@@ -1,6 +1,6 @@
 # GPIO class using Linux sysfs.
 
-![TitleImage](img/led_anim.gif) >> [source code](test/led5sw1_event.rb)
+![TitleImage](img/led_anim.gif) >> [source code](test/led5sw1_event.rb) / [schematic](img/led5sw1_schema.png)
 
 ## Overview
 
