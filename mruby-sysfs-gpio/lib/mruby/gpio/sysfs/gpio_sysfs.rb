@@ -36,6 +36,7 @@ class GPIO
   # set pin to use
   #
   #@param  [Integer] pin        pin number
+  #@!visibility private
   #
   def self._set_use( pin )
     File.binwrite("#{PATH_SYSFS}/export", pin.to_s) rescue nil
@@ -51,6 +52,7 @@ class GPIO
   # set pin to unused.
   #
   #@param  [Integer] pin        pin number
+  #@!visibility private
   #
   def self._set_unused( pin )
     File.binwrite("#{PATH_SYSFS}/unexport", pin.to_s) rescue nil
@@ -62,6 +64,7 @@ class GPIO
   #
   #@param  [Integer] pin        pin number
   #@param  [Constant] params    modes
+  #@!visibility private
   #
   def self._set_dir( pin, params )
     flag_retry = false
@@ -92,6 +95,8 @@ class GPIO
   ##
   # set pull-up or pull-down
   #
+  #@!visibility private
+  #
   def self._set_pull( pin, params )
     case (params & (PULL_UP|PULL_DOWN))
     when PULL_UP, PULL_DOWN
@@ -105,6 +110,8 @@ class GPIO
   #
   #@param  [Integer] pin        pin number
   #@param  [Constant] params    modes
+  #@return [nil]
+  #@raise [ArgumentError]
   #
   def self.setmode( pin, params )
     if params == UNUSED
@@ -137,7 +144,7 @@ class GPIO
   # Return true If the value read from the specified pin is high (==1)
   #
   #@param  [Integer] pin        pin number
-  #@return [Bool]
+  #@return [Boolean]
   #
   def self.high_at?( pin )
     return read_at(pin) == 1
@@ -148,7 +155,7 @@ class GPIO
   # Return true If the value read from the specified pin is low (==0)
   #
   #@param  [Integer] pin        pin number
-  #@return [Bool]
+  #@return [Boolean]
   #
   def self.low_at?( pin )
     return read_at(pin) == 0
@@ -160,6 +167,7 @@ class GPIO
   #
   #@param  [Integer] pin        pin number
   #@param  [Integer] value      data
+  #@return [void]
   #
   def self.write_at( pin, value )
     case value
@@ -198,7 +206,7 @@ class GPIO
   ##
   # If the loaded value is high level (==1), it returns true.
   #
-  #@return [Bool]
+  #@return [Boolean]
   #
   def high?()
     return read() == 1
@@ -208,7 +216,7 @@ class GPIO
   ##
   # If the loaded value is low-level (==0), return true.
   #
-  #@return [Bool]
+  #@return [Boolean]
   #
   def low?()
     return read() == 0
@@ -219,6 +227,7 @@ class GPIO
   # Specify the value to output to the pin as either 0 or 1.
   #
   #@param [Integer] value
+  #@return [void]
   #
   def write( value )
     @value.syswrite( value == 0 ? "0" : "1" )
@@ -229,6 +238,7 @@ class GPIO
   # Change the GPIO mode at any timing.
   #
   #@param  [Constant] params    modes
+  #@return [nil]
   #
   def setmode( params )
     if params == UNUSED
@@ -249,22 +259,22 @@ class GPIO
   #
   #@param  [Constant]   edge    GPIO::RISING, GPIO::FALLING or GPIO::BOTH
   #@param  [Integer]    bounce_ms       bounce time (milliseconds)
+  #@return [Thread]     event thread.
   #
   #@example
-  # gpio.event( GPIO::RISING ) { puts "Rising UP." }
+  #  gpio.event( GPIO::RISING ) { puts "Rising UP." }
   #
   def event( edge, bounce_ms:50, &block )
-    if !@event_init
+    if !@event_thread
       File.binwrite("#{PATH_SYSFS}/gpio#{@pin}/edge", "both")
       @bounce_time = bounce_ms / 1000.0
       @events_rising = []
       @events_falling = []
-      @event_init = true
 
       @value.sysseek( 0 )
       v1 = @value.sysread( 10 ).to_i
 
-      th = Thread.new {
+      @event_thread = Thread.new {
         while true
           @value.sysseek(0)
           rs,ws,es = IO.select(nil, nil, [@value], 1)
@@ -292,6 +302,8 @@ class GPIO
       @events_rising << block
       @events_falling << block
     end
+
+    return @event_thread
   end
 
 end
