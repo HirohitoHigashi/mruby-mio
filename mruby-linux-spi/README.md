@@ -1,5 +1,7 @@
 # SPI class using Linux spidev.
 
+![ADXL345 Demo](img/adxl345_demo.gif) >> [source code](test/ADXL345_Accelerometer.rb)
+
 ## Overview
 
 This is an implementation of the SPI class library for Linux.  
