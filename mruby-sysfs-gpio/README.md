@@ -4,8 +4,8 @@
 
 ## Overview
 
-This is an implementation of the GPIO class library for Linux.
-Follows mruby, mruby/c common I/O API guidelines.
+This is an implementation of the GPIO class library for Linux.  
+Follows [mruby, mruby/c common I/O API guidelines.](https://github.com/mruby/microcontroller-peripheral-interface-guide)
 
 
 ## Installation
