@@ -24,11 +24,15 @@ This is a wrapper for the [serialport gem](https://rubygems.org/gems/serialport)
 about RaspberryPi...
 
 ```
-#
-
+# echo server
 require "mruby/uart"   # or "mruby/uart/serialport"
 
-
+uart = UART.new("/dev/serial0")
+while true
+  s = uart.read(1)
+  uart.write s
+  print s
+end
 ```
 
 Other case, see original guidelines.
