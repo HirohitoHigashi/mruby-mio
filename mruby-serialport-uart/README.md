@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is an implementation of the UART class library.
+This is an implementation of the UART class library.　　
 Follows [mruby, mruby/c common I/O API guidelines.](https://github.com/mruby/microcontroller-peripheral-interface-guide)
 
 This is a wrapper for the [serialport gem](https://rubygems.org/gems/serialport).
