@@ -183,7 +183,7 @@ class GPIO
   # constructor
   #
   #@param  [Integer] pin        pin number
-  #@param  [Constant] params    modes
+  #@param  [Constant] params    modes (GPIO::IN or GPIO::OUT)
   #
   def initialize( pin, params )
     @pin = pin
@@ -199,7 +199,7 @@ class GPIO
   #
   def read()
     @value.sysseek( 0 )
-    return @value.sysread( 10 ).to_i
+    return @value.sysread(10).to_i
   end
 
 
@@ -258,7 +258,7 @@ class GPIO
   # (extend)
   #
   #@param  [Constant]   edge    GPIO::RISING, GPIO::FALLING or GPIO::BOTH
-  #@param  [Integer]    bounce_ms       bounce time (milliseconds)
+  #@param  [Integer]    bounce_ms       bounce time in milliseconds.
   #@return [Thread]     event thread.
   #
   #@example
@@ -272,7 +272,7 @@ class GPIO
       @events_falling = []
 
       @value.sysseek( 0 )
-      v1 = @value.sysread( 10 ).to_i
+      v1 = @value.sysread(10).to_i
 
       @event_thread = Thread.new {
         while true
