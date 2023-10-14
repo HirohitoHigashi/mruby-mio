@@ -2,9 +2,3 @@
 
 require "bundler/gem_tasks"
 task default: %i[]
-
-#class Bundler::GemHelper
-#  def guard_clean
-#      raise "ABOID RELEASE."
-#  end
-#end
