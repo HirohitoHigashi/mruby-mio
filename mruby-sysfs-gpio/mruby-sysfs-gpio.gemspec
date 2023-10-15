@@ -15,11 +15,10 @@ Gem::Specification.new do |spec|
   spec.license = "BSD 3-CLAUSE"
 
 # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
-
   spec.metadata["homepage_uri"] = spec.homepage
-  spec.metadata["source_code_uri"] = "https://github.com/HirohitoHigashi/mruby-mio/tree/main/#{spec.name}"
+  spec.metadata["source_code_uri"] = "https://github.com/HirohitoHigashi/mruby-mio/tree/v#{spec.version}/#{spec.name}"
 # spec.metadata["changelog_uri"] = "TODO: Put your gem's CHANGELOG.md URL here."
-  spec.metadata["documentation_uri"] = "https://www.rubydoc.info/gems/#{spec.name}"
+  spec.metadata["documentation_uri"] = "https://www.rubydoc.info/gems/#{spec.name}/#{spec.version}/"
 
   # Specify which files should be added to the gem when it is released.
   spec.files = Dir["README.md", "LICENSE", "lib/**/*"]
