@@ -5,7 +5,9 @@
 This is an implementation of the I2C class library for Linux.  
 Follows [mruby, mruby/c common I/O API guidelines.](https://github.com/mruby/microcontroller-peripheral-interface-guide)
 
-This library uses the Linux i2cdev device driver.
+This library uses the Linux i2cdev device driver.  
+Works well on 32-bit and 64-bit OS.
+
 
 ## Installation
 

@@ -7,7 +7,9 @@
 This is an implementation of the SPI class library for Linux.  
 Follows [mruby, mruby/c common I/O API guidelines.](https://github.com/mruby/microcontroller-peripheral-interface-guide)
 
-This library uses the Linux spidev device driver.
+This library uses the Linux spidev device driver.  
+Works well on 32-bit and 64-bit OS.
+
 
 ## Installation
 

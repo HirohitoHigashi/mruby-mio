@@ -7,6 +7,9 @@
 This is an implementation of the GPIO class library for Linux.  
 Follows [mruby, mruby/c common I/O API guidelines.](https://github.com/mruby/microcontroller-peripheral-interface-guide)
 
+This library uses the Linux sysfs.  
+Works well on 32-bit and 64-bit OS.
+
 
 ## Installation
 
