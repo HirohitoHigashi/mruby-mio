@@ -13,7 +13,7 @@ $leds = LED_PINS.map {|pin| GPIO.new( pin, GPIO::OUT ) }
 $leds.each {|led| led.write( 0 ) }
 
 n = 0
-$sw1.event( GPIO::FALLING ) {
+$sw1.irq( GPIO::EDGE_FALL ) {
   n1 = $leds.size
   if n != n1
     while true

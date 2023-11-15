@@ -16,6 +16,7 @@ class GPIO
   DRIVER = "sysfs"
 
   # Constants
+  UNUSED     = 0b0000_0000      # option
   IN         = 0b0000_0001
   OUT        = 0b0000_0010
   HIGH_Z     = 0b0000_0100
@@ -23,11 +24,8 @@ class GPIO
   PULL_DOWN  = 0b0001_0000
   OPEN_DRAIN = 0b0010_0000
 
-  # extend
-  RISING     = 0b0100_0000
-  FALLING    = 0b1000_0000
-  BOTH       = 0b1100_0000
-  UNUSED     = 0b0000_0000
+  EDGE_RISE  = 0b0001_0000_0000
+  EDGE_FALL  = 0b0010_0000_0000
 
   PATH_SYSFS = "/sys/class/gpio"
 
@@ -254,27 +252,23 @@ class GPIO
 
 
   ##
-  # rising/falling edge event
-  # (extend)
+  # (option) IRQ event handling
   #
-  #@param  [Constant]   edge    GPIO::RISING, GPIO::FALLING or GPIO::BOTH
+  #@param  [Constant]   cond            EDGE_RISE or EDGE_FALL
   #@param  [Integer]    bounce_ms       bounce time in milliseconds.
   #@return [Thread]     event thread.
   #
   #@example
-  #  gpio.event( GPIO::RISING ) { puts "Rising UP." }
+  #  gpio.irq( GPIO::EDGE_RISE ) {|reason| puts "Rising UP." }
   #
-  def event( edge, bounce_ms:50, &block )
-    if !@event_thread
+  def irq( cond, bounce_ms:50, &block )
+    if !@irq_thread
       File.binwrite("#{PATH_SYSFS}/gpio#{@pin}/edge", "both")
       @bounce_time = bounce_ms / 1000.0
-      @events_rising = []
-      @events_falling = []
-
       @value.sysseek( 0 )
       v1 = @value.sysread(10).to_i
 
-      @event_thread = Thread.new {
+      @irq_thread = Thread.new {
         while true
           @value.sysseek(0)
           rs,ws,es = IO.select(nil, nil, [@value], 1)
@@ -283,9 +277,9 @@ class GPIO
           v2 = @value.sysread(10).to_i
 
           if v1 == 0 && v2 == 1
-            @events_rising.each {|event| event.call( v2 ) }
+            @handler_rise && @handler_rise.call( EDGE_RISE )
           elsif v1 == 1 && v2 == 0
-            @events_falling.each {|event| event.call( v2 ) }
+            @handler_fall && @handler_fall.call( EDGE_FALL )
           end
 
           v1 = v2
@@ -293,17 +287,10 @@ class GPIO
       }
     end
 
-    case edge
-    when RISING
-      @events_rising << block
-    when FALLING
-      @events_falling << block
-    when BOTH
-      @events_rising << block
-      @events_falling << block
-    end
+    @handler_rise = block  if (cond & EDGE_RISE) != 0
+    @handler_fall = block  if (cond & EDGE_FALL) != 0
 
-    return @event_thread
+    return @irq_thread
   end
 
 end
