@@ -256,7 +256,7 @@ class GPIO
   #
   #@param  [Constant]   cond            EDGE_RISE or EDGE_FALL
   #@param  [Integer]    bounce_ms       bounce time in milliseconds.
-  #@return [Thread]     event thread.
+  #@return [nil]
   #
   #@example
   #  gpio.irq( GPIO::EDGE_RISE ) {|reason| puts "Rising UP." }
@@ -290,7 +290,7 @@ class GPIO
     @handler_rise = block  if (cond & EDGE_RISE) != 0
     @handler_fall = block  if (cond & EDGE_FALL) != 0
 
-    return @irq_thread
+    return nil
   end
 
 end
