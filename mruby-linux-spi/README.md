@@ -21,6 +21,13 @@ Works well on 32-bit and 64-bit OS.
   * This class defines only master devices and transfers in 8-bit units.
   * The Chip Select (CS/SS) will be managed spidev device driver automatically.
 
+
+## Operation check target
+
+  * [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)
+  * [Armadillo-IoT G3](https://armadillo.atmark-techno.com/armadillo-iot-g3)
+
+
 ## Usage
 
 about RaspberryPi...

@@ -20,6 +20,12 @@ Works well on 32-bit and 64-bit OS.
   * This library only supports master devices with 7-bit addresses.
 
 
+## Operation check target
+
+  * [Raspberry Pi 4](https://www.raspberrypi.com/products/raspberry-pi-4-model-b/)
+  * [Armadillo-IoT G3](https://armadillo.atmark-techno.com/armadillo-iot-g3)
+
+
 ## Usage
 
 about RaspberryPi...
