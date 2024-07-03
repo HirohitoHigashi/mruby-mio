@@ -2,16 +2,16 @@
 
 ## Overview
 
-This is an implementation of the I2C class library for Linux.  
+This is an implementation of the I2C class library for Linux.
 Follows [mruby, mruby/c common I/O API guidelines.](https://github.com/mruby/microcontroller-peripheral-interface-guide)
 
-This library uses the Linux i2cdev device driver.  
+This library uses the Linux i2cdev device driver.
 Works well on 32-bit and 64-bit OS.
 
 
 ## Installation
 
-    $ gem install mruby-linux-i2c
+    $ gem install mruby-i2c-linux
 
 
 ## Features
@@ -46,7 +46,7 @@ i2c.write( 0x5c, 0x20, 0x90 )
 s = i2c.read( 0x5c, 5, 0xa8 )
 ```
 
-Other case, see original guidelines.  
+Other case, see original guidelines.
 https://github.com/mruby/microcontroller-peripheral-interface-guide/blob/main/mruby_io_I2C_en.md
 
 

@@ -1,7 +1,7 @@
 #
 # I2C class using Linux i2cdev.
 #
-# Copyright (c) 2023 Shimane IT Open-Innovation Center.
+# Copyright (c) 2023- Shimane IT Open-Innovation Center.
 #
 # see: LICENSE file.
 # see: https://github.com/mruby/microcontroller-peripheral-interface-guide/blob/main/mruby_io_I2C_en.md
@@ -9,7 +9,7 @@
 # frozen_string_literal: true
 #
 
-require_relative "i2c/version"
+require_relative "linux/version"
 
 ##
 # I2C namespace
